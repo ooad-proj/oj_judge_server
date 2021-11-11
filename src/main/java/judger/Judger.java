@@ -3,6 +3,7 @@ package judger;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.file.FileReader;
 import cn.hutool.core.io.file.FileWriter;
+import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.ZipUtil;
 import configs.PathConfig;
@@ -60,7 +61,6 @@ public class Judger {
             //run cmd here
             //
             //
-            //
             FileReader fr = new FileReader(PathConfig.path + "sandbox/results.txt");
             List<String> results = fr.readLines();
             fr = new FileReader(PathConfig.path + "sandbox/out.txt");
@@ -70,14 +70,16 @@ public class Judger {
                 int timeCost = Integer.parseInt(results.get(1));
                 int memoryCost = Integer.parseInt(results.get(2));
 
+                fr = new FileReader(PathConfig.path + "operate/tc/"+ i +".in");
+                String stdin = fr.readString();
                 fr = new FileReader(PathConfig.path + "operate/tc/"+ i +".out");
                 String stdout = fr.readString();
                 boolean isSame = StrUtil.compare(stdout.trim(), output.trim(), false) == 0;
 
                 if (isSame) {
-                    Connector.sendResult(Result.AC(i, totalAmount, "Test case:\n" + output, timeCost, memoryCost));
+                    Connector.sendResult(Result.AC(i, totalAmount, "Test case:\n" + stdin + "\nStandard Output:\n" + output, timeCost, memoryCost));
                 } else {
-                    String shownDetail = "Standard Output:\n" + stdout + "Your Output:\n" + output;
+                    String shownDetail = "Test case:\n" + stdin + "\nStandard Output:\n" + stdout + "\nYour Output:\n" + output;
                     Connector.sendResult(Result.WA(i, totalAmount, shownDetail, timeCost, memoryCost));
                 }
 

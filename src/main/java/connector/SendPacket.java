@@ -7,9 +7,11 @@ public class SendPacket {
     //type == 0: standard
     //type == 1: end
     int type;
+    String submitId;
     Result result;
 
-    public SendPacket(int type, Result result) {
+    public SendPacket(int type, String submitId, Result result) {
+        this.submitId = submitId;
         this.type = type;
         this.result = result;
     }

@@ -39,11 +39,11 @@ public class Connector {
     }
 
     public static void sendResult(Result result) {
-        sendPacket(new SendPacket(0, result));
+        sendPacket(new SendPacket(0, getPacket().submitId, result));
     }
 
     protected static void finish() {
-        sendPacket(new SendPacket(1, null));
+        sendPacket(new SendPacket(1, getPacket().submitId, null));
     }
 
     public static void getFile(String path, String name) {
