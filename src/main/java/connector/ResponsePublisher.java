@@ -29,6 +29,7 @@ public class ResponsePublisher {
 
     public static void send(SendPacket packet) throws IOException {
         String message = packet.toString();
+        System.out.println("[send] " + message);
         channel.basicPublish("", MqUtil.RESPONSE_QUEUE, null, message.getBytes(StandardCharsets.UTF_8));
     }
 

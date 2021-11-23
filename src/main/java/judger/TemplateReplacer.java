@@ -39,7 +39,7 @@ public class TemplateReplacer {
             return start + code + end;
 
         }
-        return "XX";
+        return "No valid template found.";
     }
 
 }

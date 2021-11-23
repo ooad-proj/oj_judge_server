@@ -5,6 +5,7 @@ import result.Result;
 
 public class SendPacket {
     //type == 0: standard
+    //type == 2: testcase test
     //type == 1: end
     int type;
     String submitId;

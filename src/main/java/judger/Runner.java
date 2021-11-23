@@ -3,12 +3,14 @@ package judger;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.file.FileReader;
 import cn.hutool.core.io.file.FileWriter;
+import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.ZipUtil;
 import configs.PathConfig;
 import connector.Connector;
 import result.Result;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,6 +61,12 @@ public class Runner {
         fw.write(input);
         //run cmd here
         //
+        try {
+            System.out.println("run test");
+            Runtime.getRuntime().exec("./a.out").waitFor();
+        } catch (InterruptedException | IOException e) {
+            e.printStackTrace();
+        }
         //
         //
         FileReader fr = new FileReader(PathConfig.path + "sandbox/results.txt");
@@ -70,14 +78,14 @@ public class Runner {
             int timeCost = Integer.parseInt(results.get(1));
             int memoryCost = Integer.parseInt(results.get(2));
 
-            Connector.sendResult(Result.AC(1, 1, output, timeCost, memoryCost));
+            Connector.sendTestResult(Result.AC(1, 1, output, timeCost, memoryCost));
 
         } else {
             switch (results.get(0)) {
-                case "-1": Connector.sendResult(Result.TLE(1, 1, output)); break;
-                case "-2": Connector.sendResult(Result.MLE(1, 1, output)); break;
-                case "-3": Connector.sendResult(Result.RE(1, 1, output)); break;
-                case "-4": Connector.sendResult(Result.CE(1, 1, output)); break;
+                case "-1": Connector.sendTestResult(Result.TLE(1, 1, output)); break;
+                case "-2": Connector.sendTestResult(Result.MLE(1, 1, output)); break;
+                case "-3": Connector.sendTestResult(Result.RE(1, 1, output)); break;
+                case "-4": Connector.sendTestResult(Result.CE(1, 1, output)); break;
             }
         }
 

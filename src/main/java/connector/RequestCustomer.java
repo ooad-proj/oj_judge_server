@@ -24,10 +24,11 @@ public class RequestCustomer {
 
             DeliverCallback deliverCallback = (s, delivery) -> {
                 byte[] bytes = delivery.getBody();
+                System.out.println(new String(bytes));
                 RecvPacket packet = RecvPacket.fromString(new String(bytes));
 
                 if (!(packet.file == null || packet.file.equals(""))) {
-                    FileToString.stringToFile(PathConfig.path + "connect/file", packet.file);
+                    FileToString.stringToFile(PathConfig.path + "connect/file.zip", packet.file);
                 }
 
                 RequestCustomer.packet = packet;

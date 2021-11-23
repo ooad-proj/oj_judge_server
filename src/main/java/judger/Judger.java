@@ -10,6 +10,7 @@ import configs.PathConfig;
 import connector.Connector;
 import result.Result;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +38,7 @@ public class Judger {
     public void initialize() {
         //update testcase path
         FileUtil.del(PathConfig.path + "operate/tc");
+        FileUtil.del(PathConfig.path + "operate/tc.zip");
         Connector.getFile(PathConfig.path + "operate", "tc.zip");
         ZipUtil.unzip(PathConfig.path + "operate/tc.zip", PathConfig.path + "operate/tc");
 
@@ -46,9 +48,13 @@ public class Judger {
 
         //write code to run folder
         FileUtil.del(PathConfig.path + "sandbox/Main.java");
+        FileUtil.del(PathConfig.path + "sandbox/Main.class");
         FileUtil.del(PathConfig.path + "sandbox/Main.py");
         FileWriter fw = new FileWriter(PathConfig.path + "sandbox/Main." + (language.equals("java") ? "java" : "py"));
         fw.write(replacedCode);
+
+        System.out.println("------------------------------------replacedCode:\n");
+        System.out.println(replacedCode);
 
         fw = new FileWriter(PathConfig.path + "sandbox/details.txt");
         fw.write(language + "\n" + timeLimit + "\n" + memoryLimit + "\n");
@@ -60,6 +66,12 @@ public class Judger {
             FileUtil.copy(PathConfig.path + "operate/tc/" + i + ".in", PathConfig.path + "sandbox/in.txt", true);
             //run cmd here
             //
+            try {
+                System.out.println("run judge" + i);
+                Runtime.getRuntime().exec("./a.out").waitFor();
+            } catch (InterruptedException | IOException e) {
+                e.printStackTrace();
+            }
             //
             FileReader fr = new FileReader(PathConfig.path + "sandbox/results.txt");
             List<String> results = fr.readLines();
@@ -74,7 +86,7 @@ public class Judger {
                 String stdin = fr.readString();
                 fr = new FileReader(PathConfig.path + "operate/tc/"+ i +".out");
                 String stdout = fr.readString();
-                boolean isSame = StrUtil.compare(stdout.trim(), output.trim(), false) == 0;
+                boolean isSame = StrUtil.compare(stdout.replace("\r\n", "\n").trim(), output.replace("\r\n", "\n").trim(), false) == 0;
 
                 if (isSame) {
                     Connector.sendResult(Result.AC(i, totalAmount, "Test case:\n" + stdin + "\nStandard Output:\n" + output, timeCost, memoryCost));

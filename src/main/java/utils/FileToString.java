@@ -19,6 +19,7 @@ public class FileToString {
     }
 
     public static void stringToFile(String path, String str) {
+        System.out.println("me");
         BufferedOutputStream os = FileUtil.getOutputStream(path);
         try {
             os.write(Base64.getDecoder().decode(str));

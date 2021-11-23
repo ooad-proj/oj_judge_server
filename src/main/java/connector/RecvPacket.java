@@ -14,6 +14,11 @@ public class RecvPacket {
     //type == 0: from file
     // type == 1: from input
     int type;
+
+    public String getSubmitId() {
+        return submitId;
+    }
+
     String submitId;
     String file;
     String input;
