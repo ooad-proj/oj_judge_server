@@ -29,8 +29,8 @@ public class MqUtil {
             ConnectionFactory factory = new ConnectionFactory();
             factory.setHost(host);
             factory.setPort(port);
-            factory.setUsername("root");
-            factory.setPassword("123456");
+            factory.setUsername("guest");
+            factory.setPassword("guest");
             connection = factory.newConnection();
         }
         return connection;

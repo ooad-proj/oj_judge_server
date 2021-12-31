@@ -45,11 +45,11 @@ public class Result {
     }
 
     public static Result TLE(int id, int total, String message) {
-        return new Result(id, total, false, 0, 0, "TLE", "Time Limit Exceeded", message, Color.ORANGE);
+        return new Result(id, total, false, 0, 0, "TLE", "Time Limit Exceeded", "Time Limit Exceeded", Color.ORANGE);
     }
 
     public static Result MLE(int id, int total, String message) {
-        return new Result(id, total, false, 0, 0, "MLE", "Memory Limit Exceeded", message, Color.ORANGE);
+        return new Result(id, total, false, 0, 0, "MLE", "Memory Limit Exceeded", "Memory Limit Exceeded", Color.ORANGE);
     }
 
     public static Result NS(int id, int total, String message) {

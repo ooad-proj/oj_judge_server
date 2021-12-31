@@ -53,6 +53,10 @@ public class Connector {
         sendPacket(new SendPacket(1, getPacket().submitId, null));
     }
 
+    protected static void error() {
+        sendPacket(new SendPacket(-1, getPacket().submitId, null));
+    }
+
     public static void getFile(String path, String name) {
         if (localEnvironment) {
             System.out.println("Test file will be located in " + path + "/" + name);

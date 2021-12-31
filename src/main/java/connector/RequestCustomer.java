@@ -39,7 +39,9 @@ public class RequestCustomer {
                     channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    channel.basicReject(delivery.getEnvelope().getDeliveryTag(), true);
+                    Connector.error();
+                    channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+
                 }
             };
 
@@ -52,16 +54,18 @@ public class RequestCustomer {
     }
 
     public static void testSend(String host, int port) {
-        RecvPacket packet = new RecvPacket("avbkdj", "src/main/resources/tc.zip", Connector.getJudgeDetailTest());
+//        RecvPacket packet = new RecvPacket("avbkdj", "src/main/resources/tc.zip", Connector.getJudgeDetailTest());
 
 
         try {
             Connection connection = MqUtil.getConnection(host, port);
             Channel channel = connection.createChannel();
             channel.queueDeclare(MqUtil.REQUEST_QUEUE, false, false, false, null);
-            channel.basicPublish("", MqUtil.REQUEST_QUEUE, null, packet.toString().getBytes(StandardCharsets.UTF_8));
-            System.out.println("yes");
+//            channel.basicPublish("", MqUtil.REQUEST_QUEUE, null, packet.toString().getBytes(StandardCharsets.UTF_8));
             channel.close();
+//            connection.close();
+            System.out.println("init request queue");
+
 
         } catch (IOException | TimeoutException e) {
             e.printStackTrace();

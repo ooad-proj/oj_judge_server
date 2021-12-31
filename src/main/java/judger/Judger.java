@@ -10,6 +10,7 @@ import configs.PathConfig;
 import connector.Connector;
 import result.Result;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +51,7 @@ public class Judger {
         FileUtil.del(PathConfig.path + "sandbox/Main.java");
         FileUtil.del(PathConfig.path + "sandbox/Main.class");
         FileUtil.del(PathConfig.path + "sandbox/Main.py");
+        FileUtil.del(PathConfig.path + "sandbox/__pycache__");
         FileWriter fw = new FileWriter(PathConfig.path + "sandbox/Main." + (language.equals("java") ? "java" : "py"));
         fw.write(replacedCode);
 
@@ -61,6 +63,22 @@ public class Judger {
     }
 
     public void judgeAll() {
+//        FileReader fr0 = new FileReader(PathConfig.path + "sandbox/error.txt");
+//        List<String> results0 = fr0.readLines();
+//        for (String i : results0) System.out.println(i);
+//        FileUtil.del(PathConfig.path + "sandbox/error.txt");
+//        FileUtil.del(PathConfig.path + "sandbox/error.txt");
+//        try {
+//            new File(PathConfig.path + "sandbox/error.txt").createNewFile();
+//            new File(PathConfig.path + "sandbox/error.txt").createNewFile();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        fr0 = new FileReader(PathConfig.path + "sandbox/error.txt");
+//        results0 = fr0.readLines();
+//        System.out.println("nmsl----------------");
+//        for (String i : results0) System.out.println(i);
+
         int totalAmount = FileUtil.ls(PathConfig.path + "operate/tc").length / 2;
         for (int i = 1; i <= totalAmount; i++) {
             FileUtil.copy(PathConfig.path + "operate/tc/" + i + ".in", PathConfig.path + "sandbox/in.txt", true);
@@ -77,10 +95,13 @@ public class Judger {
             List<String> results = fr.readLines();
             fr = new FileReader(PathConfig.path + "sandbox/out.txt");
             String output = fr.readString();
+            if (output.length() > 1000) {
+                output = output.substring(0,1000) + "\n...\n";
+            }
 
             if (results.get(0).equals("0")) {
                 int timeCost = Integer.parseInt(results.get(1));
-                int memoryCost = Integer.parseInt(results.get(2));
+                int memoryCost = Integer.parseInt(results.get(2)) / 1024 / 1024;
 
                 fr = new FileReader(PathConfig.path + "operate/tc/"+ i +".in");
                 String stdin = fr.readString();
@@ -100,7 +121,7 @@ public class Judger {
                     case "-1": Connector.sendResult(Result.TLE(i, totalAmount, output)); break;
                     case "-2": Connector.sendResult(Result.MLE(i, totalAmount, output)); break;
                     case "-3": Connector.sendResult(Result.RE(i, totalAmount, output)); break;
-                    case "-4": Connector.sendResult(Result.CE(i, totalAmount, output)); break;
+                    case "-4": Connector.sendResult(Result.CE(i, totalAmount, "Compile Error\n" + output)); break;
                 }
                 if (results.get(0).equals("-4")) break;
             }

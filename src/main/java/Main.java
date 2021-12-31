@@ -1,4 +1,6 @@
 import connector.Connector;
+import connector.RequestCustomer;
+import connector.ResponsePublisher;
 import judger.JudgeDetail;
 import judger.Judger;
 import judger.Runner;
@@ -6,8 +8,15 @@ import judger.Runner;
 public class Main {
 
     public static void main(String[] args) {
+        try {
+            Thread.sleep(1000*15);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        RequestCustomer.testSend("rabbitmq", 5672);
+        ResponsePublisher.testClear("rabbitmq", 5672);
         System.out.println("Running success!");
-        Connector.startUp("120.24.252.217", 5672, Main::judge, false);
+        Connector.startUp("rabbitmq", 5672, Main::judge, false);
     }
 
     public static void judge() {

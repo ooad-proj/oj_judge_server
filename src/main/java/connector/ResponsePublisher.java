@@ -40,8 +40,9 @@ public class ResponsePublisher {
             Channel channel = connection.createChannel();
             channel.queueDeclare(MqUtil.RESPONSE_QUEUE, false, false, false, null);
             channel.basicConsume(MqUtil.RESPONSE_QUEUE, true, (s, d) -> {}, s -> {});
-            System.out.println("yes");
             channel.close();
+//            connection.close();
+            System.out.println("init response queue");
 
         } catch (IOException | TimeoutException e) {
             e.printStackTrace();
